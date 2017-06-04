@@ -37,7 +37,7 @@ def main():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # 1. Decision Tree - finding best max depth to overcome overfitting
-    depth = np.arange(1,2)
+    depth = np.arange(1,30)
     trainError = []
     testError = []
 
@@ -54,7 +54,7 @@ def main():
     plt.ylabel("Error")
     plt.show()
 
-    # Best Max Depth = 20 (look up graph)
+    # Best Max Depth = 20 (look at dectree.png)
 
     clf = DecisionTreeClassifier(max_depth=20)
     clf.fit(X_train, y_train)
@@ -63,29 +63,40 @@ def main():
     # Pretty good accuracy score, but takes a while to train because of the large number of data ~50000 and features ~ 600. SGD on the other hand is instantaneous because it's designed for large scale data
 
     # 2. SGD Classifer using Linear SVM
-    # Two hyperparameters to tune: n_iter and alpha(?)
+    # Two hyperparameters to tune: n_iter and alpha (are there more?)
 
-    # Preprocess Data
-    scaler = StandardScaler()
-    scaler.fit(X_train)
+    # Preprocess Data http://scikit-learn.org/stable/modules/sgd.html#tips-on-practical-use
+    # scaler = StandardScaler()
+    # scaler.fit(X_train)
+    # X_trainPre = scaler.transform(X_train)
+    # X_testPre = scaler.transform(X_test)
+    #
+    # sgd = linear_model.SGDClassifier()
+    #
+    # # Find optimal hyperparameters through gridsearch
+    # parameters = {'alpha':[0.0001, 0.001, 0.01, 0.1], 'n_iter':[5,10,15,20,25,30]}
+    # gs = GridSearchCV(sgd, parameters)
+    # gs.fit(X_trainPre, y_train)
+    # print "Optimal hyperparameters: " + str(gs.best_params_) # 0.001, 25
+    #
+    # # Use them for final training and accuracy test
+    # sgd = linear_model.SGDClassifier(alpha=gs.best_params_['alpha'], n_iter=gs.best_params_['n_iter'])
+    # sgd.fit(X_trainPre, y_train)
+    #
+    # print "SGD Accuracy Score: " + str(sgd.score(X_testPre, y_test)) # 83%
 
-    X_trainPre = scaler.transform(X_train)
-    X_testPre = scaler.transform(X_test)
+    # 3. Logistic Regression
+    # One hyperparameter - C
 
-    sgd = linear_model.SGDClassifier()
+    parameters = {'C':[0.0001,0.001,0.01,0.1,1,10,100,1000]}
+    gs = GridSearchCV(linear_model.LogisticRegression(), parameters)
+    gs.fit(X_train, y_train)
+    print "Optimal hyperparameters: " + str(gs.best_params_)
 
-    # Find optimal hyperparameters through gridsearch
-    parameters = {'alpha':[0.0001, 0.001, 0.01, 0.1], 'n_iter':[5,10,15,20,25,30]}
-    gs = GridSearchCV(sgd, parameters)
-    gs.fit(X_trainPre, y_train)
-    print "Optimal hyperparameters" + str(gs.best_params_) # 0.001, 25
+    log = linear_model.LogisticRegression(C=gs.best_params_['C'])
+    log.fit(X_train, y_train)
 
-    sgd = linear_model.SGDClassifier(alpha=0.001, n_iter=25)
-    sgd.fit(X_trainPre, y_train)
-
-    print "SGD Accuracy Score: " + str(sgd.score(X_testPre, y_test))
-
-
+    print "Logistic Regression Accuracy Score: " + str(log.score(X_test, y_test))
 
 if __name__ == "__main__":
     main()
