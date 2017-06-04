@@ -34,9 +34,10 @@ def main():
     y = np.loadtxt("train_data_final2 copy.csv", delimiter=",", usecols=(622,))
 
     print "Raw data initialized..."
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) # splits 20% into test data
 
-    # 1. Decision Tree - finding best max depth to overcome overfitting
+    # 1. Decision Tree
+    # Finding best max depth to overcome overfitting
     depth = np.arange(1,30)
     trainError = []
     testError = []
@@ -55,7 +56,6 @@ def main():
     plt.show()
 
     # Best Max Depth = 20 (look at dectree.png)
-
     clf = DecisionTreeClassifier(max_depth=20)
     clf.fit(X_train, y_train)
     print "Decision Tree Accuracy Score: " + str(clf.score(X_test, y_test))
@@ -97,6 +97,7 @@ def main():
     log.fit(X_train, y_train)
 
     print "Logistic Regression Accuracy Score: " + str(log.score(X_test, y_test))
+    # Around 83% too or slightly higher, run it again to just make sure
 
 if __name__ == "__main__":
     main()
