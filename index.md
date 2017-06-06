@@ -16,3 +16,24 @@ Perhaps we decided to go for too complex of a classifier. We decided to try a mo
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
 | ~169s | 0 | 0 | 0 | 0 |
+
+# Much Faster -- Stochastic Gradient Descent
+Still, we decided that approximately three minutes is too slow for such a classifier. While logistic regression is possible implmeneted using batch or minibatch gradient descent, we decided to make the iterative step as fast as possible by utilizing stochastic gradient descent. Stochastic gradient descent calculates a gradient on a single training example at a time rather than operating on a subset or even the entire training dataset. No wonder it can finish training in as fast as a second!
+
+| Training Time | Accuracy | Precision | Sensitivity | Specificity |
+|:-------------:|:--------:|:---------:|:-----------:|:-----------:|
+| ~1s | 0 | 0 | 0 | 0 |
+
+# More Accurate -- Decision Trees
+Although SGD is absurdly fast, 83% accuracy is far too low. Surprisingly, decision trees was a model that yielded high accuracy scores in a reasonable amount of training time.
+
+| Training Time | Accuracy | Precision | Sensitivity | Specificity |
+|:-------------:|:--------:|:---------:|:-----------:|:-----------:|
+| ~44s | 0 | 0 | 0 | 0 |
+
+# Even More Accurate -- Gradient Boosting (Ensemble)
+If a simple learner like a decision tree can achieve such a high accuracy score, why don't we try to further improve the accuracy by using an ensemble of such learners?
+
+| Training Time | Accuracy | Precision | Sensitivity | Specificity |
+|:-------------:|:--------:|:---------:|:-----------:|:-----------:|
+| ~169s | 0 | 0 | 0 | 0 |
