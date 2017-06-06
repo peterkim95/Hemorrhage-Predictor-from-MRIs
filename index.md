@@ -13,3 +13,6 @@ We know that theoretically, SVM is the most robust and widely used classificatio
 # Faster -- Logistic Regression
 Perhaps we decided to go for too complex of a classifier. We decided to try a more basic classifier -- logistic regression. Below you can find a table of this model's attributes.
 
+| Training Time | Accuracy | Precision | Sensitivity | Specificity |
+|:-------------:|:--------:|:---------:|:-----------:|:-----------:|
+| ~169s | 0 | 0 | 0 | 0 |
