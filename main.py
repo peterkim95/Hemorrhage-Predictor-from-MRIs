@@ -6,6 +6,7 @@ from sklearn import metrics
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn import linear_model
+from sklearn.ensemble import GradientBoostingClassifier
 
 def error(clf, X, y, ntrials=1, test_size=0.2) :
     """
@@ -38,27 +39,27 @@ def main():
 
     # 1. Decision Tree
     # Finding best max depth to overcome overfitting
-    depth = np.arange(1,30)
-    trainError = []
-    testError = []
-
-    for d in depth:
-        t1, t2 = error(DecisionTreeClassifier(max_depth=d), X, y)
-        trainError.append(t1)
-        testError.append(t2)
-        print "Finished calculations for depth " + str(d)
-
-    plt.plot(depth, trainError, "r-", label="Tree Training Error")
-    plt.plot(depth, testError, "b-", label="Tree Test Error")
-    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=2, mode="expand", borderaxespad=0.)
-    plt.xlabel("Max Depth")
-    plt.ylabel("Error")
-    plt.show()
-
-    # Best Max Depth = 20 (look at dectree.png)
-    clf = DecisionTreeClassifier(max_depth=20)
-    clf.fit(X_train, y_train)
-    print "Decision Tree Accuracy Score: " + str(clf.score(X_test, y_test))
+    # depth = np.arange(1,30)
+    # trainError = []
+    # testError = []
+    #
+    # for d in depth:
+    #     t1, t2 = error(DecisionTreeClassifier(max_depth=d), X, y)
+    #     trainError.append(t1)
+    #     testError.append(t2)
+    #     print "Finished calculations for depth " + str(d)
+    #
+    # plt.plot(depth, trainError, "r-", label="Tree Training Error")
+    # plt.plot(depth, testError, "b-", label="Tree Test Error")
+    # plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=2, mode="expand", borderaxespad=0.)
+    # plt.xlabel("Max Depth")
+    # plt.ylabel("Error")
+    # plt.show()
+    #
+    # # Best Max Depth = 20 (look at dectree.png)
+    # clf = DecisionTreeClassifier(max_depth=20)
+    # clf.fit(X_train, y_train)
+    # print "Decision Tree Accuracy Score: " + str(clf.score(X_test, y_test))
 
     # Pretty good accuracy score, but takes a while to train because of the large number of data ~50000 and features ~ 600. SGD on the other hand is instantaneous because it's designed for large scale data
 
@@ -98,6 +99,12 @@ def main():
 
     print "Logistic Regression Accuracy Score: " + str(log.score(X_test, y_test))
     # Around 83% too or slightly higher, run it again to just make sure
+
+    # Gradient Boosting
+
+    grd = GradientBoostingClassifier(max_depth=20, n_estimators=10)
+    grd.fit(X_train, y_train)
+    grd.score(X_test, y_test)
 
 if __name__ == "__main__":
     main()
