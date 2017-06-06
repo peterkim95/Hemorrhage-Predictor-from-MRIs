@@ -197,12 +197,12 @@ def logreg(X_train, y_train, X_test, y_test):
         clf -- Hyperparameter tuned classifier
     """
     # Tuning single hyperparameter -- C
-    parameters = {'C':[100, 200, 500]}
-    gs = GridSearchCV(linear_model.LogisticRegression(), parameters)
-    gs.fit(X_train, y_train)
-    print "Optimal hyperparameters: " + str(gs.best_params_)
+    # parameters = {'C':[100, 200, 500, 1000]}
+    # gs = GridSearchCV(linear_model.LogisticRegression(), parameters)
+    # gs.fit(X_train, y_train)
+    # print "Optimal hyperparameters: " + str(gs.best_params_)
 
-    log = linear_model.LogisticRegression(C=gs.best_params_['C'])
+    log = linear_model.LogisticRegression(C=1000)
 
     # Print time elapsed for training
     start = time.time()
@@ -210,8 +210,38 @@ def logreg(X_train, y_train, X_test, y_test):
     print(time.time() - start)
 
     print "Logistic Regression Accuracy Score: " + str(log.score(X_test, y_test))
-    # Around 83% too or slightly higher, run it again to just make sure
     return log
+
+def gradboost(X_train, y_train, X_test, y_test):
+    """
+    This function will tune, train, and time the training of a gradient
+        boosted classifier. We will use the tuned classifier to
+        evaluate it on a variety of performance metrics 
+    Parameters
+    ----------
+        X, y -- The original dataset and labels
+        X_train, y_train -- Training dataset
+        X_test, y_test -- Testing dataset
+    Return
+    ------
+        clf -- Hyperparameter tuned classifier
+    """
+    # Tuning hyperparameters
+    # parameters = {'C':[100, 200, 500, 1000]}
+    # gs = GridSearchCV(GradientBoostingClassifier, parameters)
+    # gs.fit(X_train, y_train)
+    # print "Optimal hyperparameters: " + str(gs.best_params_)
+
+    grd = GradientBoostingClassifier(max_depth=20, n_estimators=10)
+
+    # Print time elapsed for training
+    start = time.time()
+    grd.fit(X_train, y_train)
+    print (time.time() - start)
+    grd.score(X_test, y_test)
+
+    print "Gradient Boosted Accuracy Score: " + str(grd.score(X_test, y_test))
+    return grd
 
 def performance(y_true, y_pred, metric="accuracy"):
     """
@@ -252,7 +282,8 @@ def main():
     #print np.unique(clf.predict(X_test))
 
     #logreg will predict[0,1] // ~ 169s of training time // accuracy ~ 0.84
-    clf = logreg(X_train, y_train, X_test, y_test)
+    #hyperparameters: C = 1000
+    #clf = logreg(X_train, y_train, X_test, y_test)
 
     #sgd will predict[0,1] // ~ 1.28s of training time // accuracy ~ 0.83
     #hyperparameters: alpha = 0.001, n_iters = 25
@@ -262,11 +293,9 @@ def main():
     #hyperparameters: depth = 20
     #clf_dtree = dTree(X, y, X_train, y_train, X_test, y_test)
 
-    # Gradient Boosting
-
-    #grd = GradientBoostingClassifier(max_depth=20, n_estimators=10)
-    #grd.fit(X_train, y_train)
-    #grd.score(X_test, y_test)
+    #gradient boosting will predict [0,1] // 
+    grd = gradboost(X_train, y_train, X_test, y_test)
+    print np.unique(grd.predict(X_test))
 
 if __name__ == "__main__":
     main()
