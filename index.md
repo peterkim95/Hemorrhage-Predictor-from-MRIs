@@ -4,7 +4,7 @@ We were tasked with designing a good predictor for whether someone had a hemorrh
 # Hyperparameter Tuning
 Naturally, some of these classifiers come with hyperparameters that needed to be tuned before being used to test. To tune these hyperparameters, we made use of k-fold cross validation. We split the data into several folds, and picked the combination of hyperparameters that achieve the highest average accuracy score across all folds (as accuracy is the main performance metric that we care about). An easy example of this is how we chose the maximum depth hyperparameter of our decision tree classifier. Below is the cross validation graph.
 
-![alt test](https://github.com/peterkim95/Hemorrhage-Predictor-from-MRIs/dectree.png)
+![alt test](https://github.com/peterkim95/Hemorrhage-Predictor-from-MRIs/blob/master/dectree.png)
 
 What we really seek is for a good test accuracy. We see that the test accuracy stagnates at around a maxdepth of 20 while the training error continues to decrease. That is a sign of overfitting. This is why we settled for a maxdepth of 20. We used this technique to tune the hyperparameters for all of our classifiers.
 
