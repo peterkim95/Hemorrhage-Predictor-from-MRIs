@@ -8,6 +8,7 @@ from sklearn import metrics
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn import linear_model
+from sklearn.ensemble import GradientBoostingClassifier
 
 def error(clf, X, y, ntrials=1, test_size=0.2) :
     """
@@ -54,20 +55,18 @@ def dTree(X, y, X_train, y_train, X_test, y_test):
     # depth = np.arange(1,30)
     # trainError = []
     # testError = []
-
     # for d in depth:
     #     t1, t2 = error(DecisionTreeClassifier(max_depth=d), X, y)
     #     trainError.append(t1)
     #     testError.append(t2)
     #     print "Finished calculations for depth " + str(d)
-
     # plt.plot(depth, trainError, "r-", label="Tree Training Error")
     # plt.plot(depth, testError, "b-", label="Tree Test Error")
     # plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=2, mode="expand", borderaxespad=0.)
     # plt.xlabel("Max Depth")
     # plt.ylabel("Error")
     # plt.show()
-
+    
     # Best Max Depth = 20 (look at dectree.png)
     clf = DecisionTreeClassifier(max_depth=20)
     
@@ -198,7 +197,7 @@ def logreg(X_train, y_train, X_test, y_test):
         clf -- Hyperparameter tuned classifier
     """
     # Tuning single hyperparameter -- C
-    parameters = {'C':[0.0001,0.001,0.01,0.1,1,10,100,1000]}
+    parameters = {'C':[100, 200, 500]}
     gs = GridSearchCV(linear_model.LogisticRegression(), parameters)
     gs.fit(X_train, y_train)
     print "Optimal hyperparameters: " + str(gs.best_params_)
@@ -248,17 +247,26 @@ def main():
     print "Raw data initialized..."
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) # splits 20% into test data
 
-    #dtree will predict [0,1] // ~49s of training time // accuracy ~ 0.96
-    #hyperparameters: depth = 20
-    # clf_dtree = dTree(X, y, X_train, y_train, X_test, y_test)
-    
-    #sgd will predict[0,1] // ~ 54s of training time // accuracy ~ 0.83
+    #svms too slow
+    #clf = svmlin(X_train, y_train, X_test, y_test)   
+    #print np.unique(clf.predict(X_test))
+
+    #logreg will predict[0,1] // ~ 169s of training time // accuracy ~ 0.84
+    clf = logreg(X_train, y_train, X_test, y_test)
+
+    #sgd will predict[0,1] // ~ 1.28s of training time // accuracy ~ 0.83
     #hyperparameters: alpha = 0.001, n_iters = 25
-    # clf_sgd = sgd(X_train, y_train, X_test, y_test)
-   
-    #svmlin will predict
-    clf = svmlin(X_train, y_train, X_test, y_test)   
-    print np.unique(clf.predict(X_test))
+    #clf_sgd = sgd(X_train, y_train, X_test, y_test)  
+
+    #dtree will predict [0,1] // ~44s of training time // accuracy ~ 0.96
+    #hyperparameters: depth = 20
+    #clf_dtree = dTree(X, y, X_train, y_train, X_test, y_test)
+
+    # Gradient Boosting
+
+    #grd = GradientBoostingClassifier(max_depth=20, n_estimators=10)
+    #grd.fit(X_train, y_train)
+    #grd.score(X_test, y_test)
 
 if __name__ == "__main__":
     main()
