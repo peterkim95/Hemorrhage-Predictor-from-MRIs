@@ -53,3 +53,16 @@ If a simple learner like a decision tree can achieve such a high accuracy score,
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
 | ~2316s | .98 | .97 | .99 | .97 |
+
+# Conclusion
+
+Overall, our results can be summarized by the following table:
+
+| Classifier | Training Time | Test Accuracy |
+|:----------:|:-------------:|:-------------:|
+| Logistic Regression | ~232s | .85 |
+| SGD (w/ Linear SVM) | ~1s | .83 |
+| Decision Tree | ~44s | .96 |
+| Gradient Boosting (w/ 500 learners) | ~2316s | .98 |
+
+Clearly, if one is attempting to attain the best accuracy, an ensemble learning method such as Gradient Boosting will suffice. However, one must take account of the exponentially longer training time to use Gradient Boosting. Instead, we recommend using a decision tree of max depth = 20 to train the data, as it only takes a split fraction of the time and yet gives a high accuracy of 96%. If one is searching for the fastest solution, then certainly SGD is the method to employ as the training time is almost instantaneous.
