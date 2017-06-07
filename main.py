@@ -30,9 +30,9 @@ def error(clf, X, y, ntrials=1, test_size=0.2) :
 
     return train_error, test_error
 
-    """ 
-    Pretty good accuracy score, but takes a while to train because of the large 
-    number of data ~50000 and features ~ 600. SGD on the other hand is instantaneous 
+    """
+    Pretty good accuracy score, but takes a while to train because of the large
+    number of data ~50000 and features ~ 600. SGD on the other hand is instantaneous
     because it's designed for large scale data
     """
 
@@ -40,7 +40,7 @@ def dTree(X, y, X_train, y_train, X_test, y_test):
     """
     This function will tune, train, and time the training of a Decision
         tree. We will use the tuned classifier to evaluate it on a
-        variety of performance metrics 
+        variety of performance metrics
     Parameters
     ----------
         X, y -- The original dataset and labels
@@ -66,15 +66,15 @@ def dTree(X, y, X_train, y_train, X_test, y_test):
     # plt.xlabel("Max Depth")
     # plt.ylabel("Error")
     # plt.show()
-    
+
     # Best Max Depth = 20 (look at dectree.png)
     clf = DecisionTreeClassifier(max_depth=20)
-    
+
     # Print time elapsed for training
     start = time.time()
     clf.fit(X_train, y_train)
     print(time.time() - start)
-    
+
     print "Decision Tree Accuracy Score: " + str(clf.score(X_test, y_test))
     return clf
 
@@ -82,7 +82,7 @@ def svmlin(X_train, y_train, X_test, y_test):
     """
     This function will tune, train, and time the training of a Support Vector
         Machine with linear kernel. We will use the tuned classifier to
-        evaluate it on a variety of performance metrics 
+        evaluate it on a variety of performance metrics
     Parameters
     ----------
         X, y -- The original dataset and labels
@@ -98,7 +98,7 @@ def svmlin(X_train, y_train, X_test, y_test):
     # gs = GridSearchCV(clf, parameters)
     # gs.fit(X_train, y_train)
     # print "Optimal hyperparameters: " + str(gs.best_params_)
-    
+
     # Training classifier with best parameter
     # clf_lin = svm.SVC(kernel='linear', C=gs.best_params_['C'])
     clf_lin = svm.SVC(kernel='linear', C=10)
@@ -106,7 +106,7 @@ def svmlin(X_train, y_train, X_test, y_test):
     start = time.time()
     clf_lin.fit(X_train, y_train)
     print(time.time() - start)
-    
+
     print "Linear Kernel SVM Accuracy Score: " + str(clf_lin.score(X_test, y_test))
     return clf_lin
 
@@ -114,7 +114,7 @@ def svmrbf(X_train, y_train, X_test, y_test):
     """
     This function will tune, train, and time the training of a Support Vector
         Machine with rbf kernel. We will use the tuned classifier to
-        evaluate it on a variety of performance metrics 
+        evaluate it on a variety of performance metrics
     Parameters
     ----------
         X, y -- The original dataset and labels
@@ -130,23 +130,23 @@ def svmrbf(X_train, y_train, X_test, y_test):
     gs = GridSearchCV(clf, parameters)
     gs.fit(X_train, y_train)
     print "Optimal hyperparameters: " + str(gs.best_params_)
-    
+
     # Training the classifier
-    clf_rbf = svm.SVC(kernel='rbf', C=gs.best_params_['C'], gamma=gs.best_params_['gamma']) 
-    
+    clf_rbf = svm.SVC(kernel='rbf', C=gs.best_params_['C'], gamma=gs.best_params_['gamma'])
+
     # Print time elapsed for training
     start = time.time()
     clf_rbf.fit(X_train, y_train)
     print(time.time() - start)
-    
+
     print "RBF Kernel SVM Accuracy Score: " + str(clf_rbf.score(X_test, y_test))
     return clf_rbf
 
 def sgd(X_train, y_train, X_test, y_test):
     """
-    This function will tune, train, and time the training of a Stochastic 
+    This function will tune, train, and time the training of a Stochastic
         Gradient Descent classifier. We will use the tuned classifier to
-        evaluate it on a variety of performance metrics 
+        evaluate it on a variety of performance metrics
     Parameters
     ----------
         X, y -- The original dataset and labels
@@ -163,22 +163,22 @@ def sgd(X_train, y_train, X_test, y_test):
     scaler.fit(X_train)
     X_trainPre = scaler.transform(X_train)
     X_testPre = scaler.transform(X_test)
-    
+
     # # Tuning hyperparameters -- alpha, niter
     # sgd = linear_model.SGDClassifier()
     # parameters = {'alpha':[0.0001, 0.001, 0.01, 0.1], 'n_iter':[5,10,15,20,25,30]}
     # gs = GridSearchCV(sgd, parameters)
-    # 
+    #
     # gs.fit(X_trainPre, y_train)
     # print "Optimal hyperparameters: " + str(gs.best_params_) # 0.001, 25
-    
+
     # Training the hyperparameter-tuned model
     sgd = linear_model.SGDClassifier(alpha=0.001, n_iter=25) #from above
     # Print time elapsed for training
     start = time.time()
     sgd.fit(X_trainPre, y_train)
     print(time.time() - start)
-    
+
     print "SGD Accuracy Score: " + str(sgd.score(X_testPre, y_test)) # 83%
     return sgd
 
@@ -186,7 +186,7 @@ def logreg(X_train, y_train, X_test, y_test):
     """
     This function will tune, train, and time the training of a Logistic
         Regression classifier. We will use the tuned classifier to
-        evaluate it on a variety of performance metrics 
+        evaluate it on a variety of performance metrics
     Parameters
     ----------
         X, y -- The original dataset and labels
@@ -216,7 +216,7 @@ def gradboost(X_train, y_train, X_test, y_test):
     """
     This function will tune, train, and time the training of a gradient
         boosted classifier. We will use the tuned classifier to
-        evaluate it on a variety of performance metrics 
+        evaluate it on a variety of performance metrics
     Parameters
     ----------
         X, y -- The original dataset and labels
@@ -259,7 +259,7 @@ def performance(y_true, y_pred, metric="accuracy"):
     mets["accuracy"] = metrics.accuracy_score(y_true, y_pred)
     mets["precision"] = metrics.precision_score(y_true, y_pred)
     conf = metrics.confusion_matrix(y_true, y_pred, labels=[1,0])
-    mets["sensitivity"] = float(conf[0,0]) / np.sum(conf[0,:]) 
+    mets["sensitivity"] = float(conf[0,0]) / np.sum(conf[0,:])
     mets["specificity"] = float(conf[1,1]) / np.sum(conf[1,:])
     return mets[metric]
 
@@ -273,7 +273,7 @@ def main():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) # splits 20% into test data
 
     #svms too slow
-    #clf = svmlin(X_train, y_train, X_test, y_test)   
+    #clf = svmlin(X_train, y_train, X_test, y_test)
     #print np.unique(clf.predict(X_test))
 
     #logreg will predict[0,1] // ~ 169s of training time // accuracy ~ 0.84
@@ -282,7 +282,7 @@ def main():
 
     #sgd will predict[0,1] // ~ 1.28s of training time // accuracy ~ 0.83
     #hyperparameters: alpha = 0.001, n_iters = 25
-    clf_sgd = sgd(X_train, y_train, X_test, y_test)  
+    clf_sgd = sgd(X_train, y_train, X_test, y_test)
 
     #dtree will predict [0,1] // ~ 44s of training time // accuracy ~ 0.96
     #hyperparameters: depth = 20

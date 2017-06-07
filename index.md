@@ -4,7 +4,7 @@ We were tasked with designing a good predictor for whether someone had a hemorrh
 # Hyperparameter Tuning
 Naturally, some of these classifiers come with hyperparameters that needed to be tuned before being used to test. To tune these hyperparameters, we made use of k-fold cross validation. We split the data into several folds, and picked the combination of hyperparameters that achieve the highest average accuracy score across all folds (as accuracy is the main performance metric that we care about). An easy example of this is how we chose the maximum depth hyperparameter of our decision tree classifier. Below is the cross validation graph.
 
-![alt test](https://github.com/peterkim95/Hemorrhage-Predictor-from-MRIs/blob/master/dectree.png)
+![Image](https://github.com/peterkim95/Hemorrhage-Predictor-from-MRIs/blob/master/dectree.png)
 
 What we really seek is for a good test accuracy. We see that the test accuracy stagnates at around a maxdepth of 20 while the training error continues to decrease. That is a sign of overfitting. This is why we settled for a maxdepth of 20. We used this technique to tune the hyperparameters for all of our classifiers.
 
@@ -22,11 +22,11 @@ Perhaps we decided to go for too complex of a classifier. We decided to try a mo
 | ~232s | .85 | .83 | .88 | .81 |
 
 # Much Faster -- Stochastic Gradient Descent
-Still, we decided that approximately three minutes is too slow for such a classifier. While logistic regression is possible implmeneted using batch or minibatch gradient descent, we decided to make the iterative step as fast as possible by utilizing stochastic gradient descent. Stochastic gradient descent calculates a gradient on a single training example at a time rather than operating on a subset or even the entire training dataset. No wonder it can finish training in as fast as a second! However, the accuracy is quite atrocious, and each iteration we run sgd, the results differ since the order in which the algorithm looks at examples greatly affects ths final parameters that the model converges on.
+Still, we decided that approximately three minutes is too slow for such a classifier. While logistic regressions can possibly be implemented using batch or mini-batch gradient descent, we decided to make the iterative step as fast as possible by utilizing stochastic gradient descent (SGD). Stochastic gradient descent calculates a gradient on a single training example at a time rather than operating on a subset or even the entire training dataset. No wonder it can finish training in as fast as a second!
 
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
-| ~1s | .51 | .51 | .63 | .39 |
+| ~1s | .83 | .81 | .84 | .80 |
 
 # More Accurate -- Decision Trees
 Although SGD is absurdly fast, 83% accuracy is far too low. Surprisingly, decision trees was a model that yielded high accuracy scores in a reasonable amount of training time.
@@ -36,7 +36,7 @@ Although SGD is absurdly fast, 83% accuracy is far too low. Surprisingly, decisi
 | ~44s | .96 | .94 | .98 | .94 |
 
 # But How Accurate Can We Get? -- Gradient Boosting (Ensemble)
-If a simple learner like a decision tree can achieve such a high accuracy score, why don't we try to further improve the accuracy by using an ensemble of such learners? In this section we decided to imagine a scenario in which we had a much greater amount of computing power -- how could we create the most accurate classifier? The answer is an ensemble of 500 weak learners. More learners would further improve the accuracy, but with diminishing returns. The performance statistics are great.
+If a simple learner like a decision tree can achieve such a high accuracy score, why don't we try to further improve the accuracy by using an ensemble of such learners? In this section we decided to imagine a scenario in which we had a much greater amount of computing power -- how could we create the most accurate classifier? The answer is an ensemble of 500 weak learners. More learners would further improve the accuracy, but with diminishing returns. The performance statistics are the best as clearly observable from the table below.
 
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
