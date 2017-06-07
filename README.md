@@ -1,4 +1,4 @@
-# Hemorrhage-Predictor-from-MRIs
+# Hemorrhage Prediction from MRIs
 
 Our code consists of a main function, all the classifier training functions, and a performance evaluation function.
 
@@ -7,3 +7,5 @@ Each of the classifier training function takes in X,y train and test sets and re
 The performance measuring function takes in y_test (the actual test labels), the predicted y labels, and the performance metric that we want to evaluate. It will return the float value of the performance metric.
 
 The main function will call each of the classifier training functions and save the returned/trained classifiers in a list. When we have gathered all the trained classifiers, it'll iterate through all of them and calculate all the performance metrics for it.
+
+Simply place the training data file (named "train_data_final2.csv"), which can be obtained from Professor Fabien Scalzo, in the same directory as main.py. Then, you can run our code by running main.py

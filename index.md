@@ -4,9 +4,9 @@ We were tasked with designing a good predictor for whether someone had a hemorrh
 # Hyperparameter Tuning
 Naturally, some of these classifiers come with hyperparameters that needed to be tuned before being used to test. To tune these hyperparameters, we made use of k-fold cross validation. We split the data into several folds, and picked the combination of hyperparameters that achieve the highest average accuracy score across all folds (as accuracy is the main performance metric that we care about). An easy example of this is how we chose the maximum depth hyperparameter of our decision tree classifier. Below is the cross validation graph.
 
-![Image](https://github.com/peterkim95/Hemorrhage-Predictor-from-MRIs/blob/master/dectree.png)
+![Image](/dectree.png)
 
-What we really seek is for a good test accuracy. We see that the test accuracy stagnates at around a maxdepth of 20 while the training error continues to decrease. That is a sign of overfitting. This is why we settled for a maxdepth of 20. We used this technique to tune the hyperparameters for all of our classifiers.
+What we really seek is for a good test accuracy. We see that the test accuracy stagnates at around a max depth of 20 while the training error continues to decrease. That is a sign of overfitting. This is why we settled for a max depth of 20. We used this technique to tune the hyperparameters for all of our classifiers.
 
 # Performance Metrics
 We did not want to solely rely on test accuracy as a performance metric. We also wanted to test each of our classifiers based on several other performance metrics. These include precision, sensitivity, and specificity. Precision tells us how well our model predicts positives. A precision score of 1 means that all of the model's positive predictions are true positives while a precision score of 0 means all of its positive predictions are false positives. Sensitivity tells us the probability of detection. More specifically, it tells us what the percentage of hemorrhages the model correctly predicted. Finally, specificity is the foil to sensitivity. Specificity tells us what percentage of the non-hemorrhages were correctly predicted.
