@@ -8,6 +8,18 @@ Naturally, some of these classifiers come with hyperparameters that needed to be
 
 What we really seek is for a good test accuracy. We see that the test accuracy stagnates at around a max depth of 20 while the training error continues to decrease. That is a sign of overfitting. This is why we settled for a max depth of 20. We used this technique to tune the hyperparameters for all of our classifiers.
 
+Otherwise, we employed the GridSearchCV method in the scikit-learn API to determine the best hyperparameters for each classier. Observe the following example for our SGD classifier
+
+```
+# Tuning hyperparameters -- alpha, n_iter
+sgd = linear_model.SGDClassifier()
+parameters = {'alpha':[0.0001, 0.001, 0.01, 0.1], 'n_iter':[5,10,15,20,25,30]}
+gs = GridSearchCV(sgd, parameters)
+# we start the exhaustive grid search using the given training data
+gs.fit(X_trainPre, y_train)
+print "Optimal hyperparameters: " + str(gs.best_params_)
+```
+
 # Performance Metrics
 We did not want to solely rely on test accuracy as a performance metric. We also wanted to test each of our classifiers based on several other performance metrics. These include precision, sensitivity, and specificity. Precision tells us how well our model predicts positives. A precision score of 1 means that all of the model's positive predictions are true positives while a precision score of 0 means all of its positive predictions are false positives. Sensitivity tells us the probability of detection. More specifically, it tells us what the percentage of hemorrhages the model correctly predicted. Finally, specificity is the foil to sensitivity. Specificity tells us what percentage of the non-hemorrhages were correctly predicted.
 
@@ -22,7 +34,7 @@ Perhaps we decided to go for too complex of a classifier. We decided to try a mo
 | ~232s | .85 | .83 | .88 | .81 |
 
 # Much Faster -- Stochastic Gradient Descent
-Still, we decided that approximately three minutes is too slow for such a classifier. While logistic regressions can possibly be implemented using batch or mini-batch gradient descent, we decided to make the iterative step as fast as possible by utilizing stochastic gradient descent (SGD). Stochastic gradient descent calculates a gradient on a single training example at a time rather than operating on a subset or even the entire training dataset. No wonder it can finish training in as fast as a second!
+Still, we decided that approximately three minutes is too slow for such a classifier. While logistic regressions can possibly be implemented using batch or mini-batch gradient descent, we decided to make the iterative step as fast as possible by utilizing stochastic gradient descent (SGD) using Linear SVM. Stochastic gradient descent calculates a gradient on a single training example at a time rather than operating on a subset or even the entire training dataset. No wonder it can finish training in as fast as a second!
 
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
