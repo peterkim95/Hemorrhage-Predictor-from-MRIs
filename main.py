@@ -227,12 +227,12 @@ def gradboost(X_train, y_train, X_test, y_test):
         clf -- Hyperparameter tuned classifier
     """
     # Tuning hyperparameters
-    # parameters = {'C':[100, 200, 500, 1000]}
-    # gs = GridSearchCV(GradientBoostingClassifier, parameters)
+    # parameters = {'n_estimators':[15,25,50]}
+    # gs = GridSearchCV(GradientBoostingClassifier(), parameters)
     # gs.fit(X_train, y_train)
     # print "Optimal hyperparameters: " + str(gs.best_params_)
 
-    grd = GradientBoostingClassifier(max_depth=20, n_estimators=10)
+    grd = GradientBoostingClassifier(max_depth=20, n_estimators=500, loss='deviance', learning_rate=1)
 
     # Print time elapsed for training
     start = time.time()
@@ -255,15 +255,10 @@ def performance(y_true, y_pred, metric="accuracy"):
     ------
         score -- (float) the metric performance score
     """
-    # map predictions to binary values
-    y_label = np.sign(y_pred)
-    #y_label[y_label==0] = 1
-
     mets = {}
-    mets["accuracy"] = metrics.accuracy_score(y_true, y_label)
-    mets["f1-score"] = metrics.f1_score(y_true, y_label)
-    mets["precision"] = metrics.precision_score(y_true, y_label)
-    conf = metrics.confusion_matrix(y_true, y_label, labels=[1,-1])
+    mets["accuracy"] = metrics.accuracy_score(y_true, y_pred)
+    mets["precision"] = metrics.precision_score(y_true, y_pred)
+    conf = metrics.confusion_matrix(y_true, y_pred, labels=[1,0])
     mets["sensitivity"] = float(conf[0,0]) / np.sum(conf[0,:]) 
     mets["specificity"] = float(conf[1,1]) / np.sum(conf[1,:])
     return mets[metric]
@@ -283,19 +278,26 @@ def main():
 
     #logreg will predict[0,1] // ~ 169s of training time // accuracy ~ 0.84
     #hyperparameters: C = 1000
-    #clf = logreg(X_train, y_train, X_test, y_test)
+    #clf_log = logreg(X_train, y_train, X_test, y_test)
 
     #sgd will predict[0,1] // ~ 1.28s of training time // accuracy ~ 0.83
     #hyperparameters: alpha = 0.001, n_iters = 25
-    #clf_sgd = sgd(X_train, y_train, X_test, y_test)  
+    clf_sgd = sgd(X_train, y_train, X_test, y_test)  
 
-    #dtree will predict [0,1] // ~44s of training time // accuracy ~ 0.96
+    #dtree will predict [0,1] // ~ 44s of training time // accuracy ~ 0.96
     #hyperparameters: depth = 20
     #clf_dtree = dTree(X, y, X_train, y_train, X_test, y_test)
 
-    #gradient boosting will predict [0,1] // 
-    grd = gradboost(X_train, y_train, X_test, y_test)
-    print np.unique(grd.predict(X_test))
+    #gradient boosting will predict [0,1] // ~ 770s of training time // accuracy ~ 0.97
+    #hyperparameters: loss = deviance, learning_rate = 1, n_estimators = 15
+    clf_grd = gradboost(X_train, y_train, X_test, y_test)
+
+    clfs = [clf_sgd, clf_grd]
+    metrics = ["accuracy", "precision", "sensitivity", "specificity"]
+    for clf in clfs:
+        print "Calculating performance metrics: "
+        for m in metrics:
+            print m + ": " + str(performance(y_test,clf.predict(X_test),m))
 
 if __name__ == "__main__":
     main()

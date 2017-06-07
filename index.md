@@ -19,25 +19,25 @@ Perhaps we decided to go for too complex of a classifier. We decided to try a mo
 
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
-| ~169s | 0 | 0 | 0 | 0 |
+| ~232s | .85 | .83 | .88 | .81 |
 
 # Much Faster -- Stochastic Gradient Descent
-Still, we decided that approximately three minutes is too slow for such a classifier. While logistic regression is possible implmeneted using batch or minibatch gradient descent, we decided to make the iterative step as fast as possible by utilizing stochastic gradient descent. Stochastic gradient descent calculates a gradient on a single training example at a time rather than operating on a subset or even the entire training dataset. No wonder it can finish training in as fast as a second!
+Still, we decided that approximately three minutes is too slow for such a classifier. While logistic regression is possible implmeneted using batch or minibatch gradient descent, we decided to make the iterative step as fast as possible by utilizing stochastic gradient descent. Stochastic gradient descent calculates a gradient on a single training example at a time rather than operating on a subset or even the entire training dataset. No wonder it can finish training in as fast as a second! However, the accuracy is quite atrocious, and each iteration we run sgd, the results differ since the order in which the algorithm looks at examples greatly affects ths final parameters that the model converges on.
 
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
-| ~1s | 0 | 0 | 0 | 0 |
+| ~1s | .51 | .51 | .63 | .39 |
 
 # More Accurate -- Decision Trees
 Although SGD is absurdly fast, 83% accuracy is far too low. Surprisingly, decision trees was a model that yielded high accuracy scores in a reasonable amount of training time.
 
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
-| ~44s | 0 | 0 | 0 | 0 |
+| ~44s | .96 | .94 | .98 | .94 |
 
-# Even More Accurate -- Gradient Boosting (Ensemble)
-If a simple learner like a decision tree can achieve such a high accuracy score, why don't we try to further improve the accuracy by using an ensemble of such learners?
+# But How Accurate Can We Get? -- Gradient Boosting (Ensemble)
+If a simple learner like a decision tree can achieve such a high accuracy score, why don't we try to further improve the accuracy by using an ensemble of such learners? In this section we decided to imagine a scenario in which we had a much greater amount of computing power -- how could we create the most accurate classifier? The answer is an ensemble of 500 weak learners. More learners would further improve the accuracy, but with diminishing returns. The performance statistics are great.
 
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
-| ~169s | 0 | 0 | 0 | 0 |
+| ~2316s | .98 | .97 | .99 | .97 |
