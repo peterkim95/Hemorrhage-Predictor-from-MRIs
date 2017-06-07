@@ -1,40 +1,9 @@
 # Hemorrhage-Predictor-from-MRIs
 
-instructions go here
-<!-- ## Welcome to GitHub Pages
+Our code consists of a main function, all the classifier training functions, and a performance evaluation function.
 
-You can use the [editor on GitHub](https://github.com/peterkim95/Hemorrhage-Predictor-from-MRIs/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Each of the classifier training function takes in X,y train and test sets and returns the final trained classifiers. It first uses cross validation to help choose the hyperparameters (we commented those sections of code out because we already tuned the hyperparameters) then uses those hyperparameters to train the classifier.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+The performance measuring function takes in y_test (the actual test labels), the predicted y labels, and the performance metric that we want to evaluate. It will return the float value of the performance metric.
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/peterkim95/Hemorrhage-Predictor-from-MRIs/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out. -->
+The main function will call each of the classifier training functions and save the returned/trained classifiers in a list. When we have gathered all the trained classifiers, it'll iterate through all of them and calculate all the performance metrics for it.
