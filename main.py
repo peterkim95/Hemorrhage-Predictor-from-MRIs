@@ -9,6 +9,8 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn import linear_model
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import KFold
 
 def error(clf, X, y, ntrials=1, test_size=0.2) :
     """
@@ -73,9 +75,9 @@ def dTree(X, y, X_train, y_train, X_test, y_test):
     # Print time elapsed for training
     start = time.time()
     clf.fit(X_train, y_train)
-    print(time.time() - start)
+    print "DTree Time: " + str(time.time() - start)
 
-    print "Decision Tree Accuracy Score: " + str(clf.score(X_test, y_test))
+    # print "Decision Tree Accuracy Score: " + str(clf.score(X_test, y_test))
     return clf
 
 def svmlin(X_train, y_train, X_test, y_test):
@@ -107,7 +109,7 @@ def svmlin(X_train, y_train, X_test, y_test):
     clf_lin.fit(X_train, y_train)
     print(time.time() - start)
 
-    print "Linear Kernel SVM Accuracy Score: " + str(clf_lin.score(X_test, y_test))
+    # print "Linear Kernel SVM Accuracy Score: " + str(clf_lin.score(X_test, y_test))
     return clf_lin
 
 def svmrbf(X_train, y_train, X_test, y_test):
@@ -139,7 +141,7 @@ def svmrbf(X_train, y_train, X_test, y_test):
     clf_rbf.fit(X_train, y_train)
     print(time.time() - start)
 
-    print "RBF Kernel SVM Accuracy Score: " + str(clf_rbf.score(X_test, y_test))
+    # print "RBF Kernel SVM Accuracy Score: " + str(clf_rbf.score(X_test, y_test))
     return clf_rbf
 
 def sgd(X_train, y_train, X_test, y_test):
@@ -177,10 +179,10 @@ def sgd(X_train, y_train, X_test, y_test):
     # Print time elapsed for training
     start = time.time()
     sgd.fit(X_trainPre, y_train)
-    print(time.time() - start)
+    print "SGD Time: " + str(time.time() - start)
 
-    print "SGD Accuracy Score: " + str(sgd.score(X_testPre, y_test)) # 83%
-    return sgd
+    # print "SGD Accuracy Score: " + str(sgd.score(X_testPre, y_test)) # 83%
+    return sgd, X_testPre
 
 def logreg(X_train, y_train, X_test, y_test):
     """
@@ -207,9 +209,9 @@ def logreg(X_train, y_train, X_test, y_test):
     # Print time elapsed for training
     start = time.time()
     log.fit(X_train, y_train)
-    print(time.time() - start)
+    print "Log Time: " + str(time.time() - start)
 
-    print "Logistic Regression Accuracy Score: " + str(log.score(X_test, y_test))
+    # print "Logistic Regression Accuracy Score: " + str(log.score(X_test, y_test))
     return log
 
 def gradboost(X_train, y_train, X_test, y_test):
@@ -232,18 +234,18 @@ def gradboost(X_train, y_train, X_test, y_test):
     # gs.fit(X_train, y_train)
     # print "Optimal hyperparameters: " + str(gs.best_params_)
 
-    grd = GradientBoostingClassifier(max_depth=20, n_estimators=500, loss='deviance', learning_rate=1)
+    grd = GradientBoostingClassifier(max_depth=20, n_estimators=100, loss='deviance', learning_rate=1)
 
     # Print time elapsed for training
     start = time.time()
     grd.fit(X_train, y_train)
-    print (time.time() - start)
+    print "GRD Time: " + str(time.time() - start)
     grd.score(X_test, y_test)
 
-    print "Gradient Boosted Accuracy Score: " + str(grd.score(X_test, y_test))
+    # print "Gradient Boosted Accuracy Score: " + str(grd.score(X_test, y_test))
     return grd
 
-def performance(y_true, y_pred, metric="accuracy"):
+def performance(y_true, y_pred):
     """
     Parameters
     ----------
@@ -253,7 +255,7 @@ def performance(y_true, y_pred, metric="accuracy"):
             accuracy, f1-score, precision, sensitivity, and specificity
     Return
     ------
-        score -- (float) the metric performance score
+        score -- all metrics
     """
     mets = {}
     mets["accuracy"] = metrics.accuracy_score(y_true, y_pred)
@@ -261,7 +263,8 @@ def performance(y_true, y_pred, metric="accuracy"):
     conf = metrics.confusion_matrix(y_true, y_pred, labels=[1,0])
     mets["sensitivity"] = float(conf[0,0]) / np.sum(conf[0,:])
     mets["specificity"] = float(conf[1,1]) / np.sum(conf[1,:])
-    return mets[metric]
+    return mets
+
 
 def main():
     # x is 50,000 * 622 i.e. 50,000 data points and 622 features
@@ -270,34 +273,64 @@ def main():
     y = np.loadtxt("train_data_final2 copy.csv", delimiter=",", usecols=(622,))
 
     print "Raw data initialized..."
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) # splits 20% into test data
 
-    #svms too slow
-    #clf = svmlin(X_train, y_train, X_test, y_test)
-    #print np.unique(clf.predict(X_test))
+    kf = KFold(n_splits=5)
 
-    #logreg will predict[0,1] // ~ 169s of training time // accuracy ~ 0.84
-    #hyperparameters: C = 1000
-    #clf_log = logreg(X_train, y_train, X_test, y_test)
+    logResult = []
+    sgdResult = []
+    dtreeResult = []
+    grdResult = []
 
-    #sgd will predict[0,1] // ~ 1.28s of training time // accuracy ~ 0.83
-    #hyperparameters: alpha = 0.001, n_iters = 25
-    clf_sgd = sgd(X_train, y_train, X_test, y_test)
-
-    #dtree will predict [0,1] // ~ 44s of training time // accuracy ~ 0.96
-    #hyperparameters: depth = 20
-    #clf_dtree = dTree(X, y, X_train, y_train, X_test, y_test)
-
-    #gradient boosting will predict [0,1] // ~ 770s of training time // accuracy ~ 0.97
-    #hyperparameters: loss = deviance, learning_rate = 1, n_estimators = 15
-    clf_grd = gradboost(X_train, y_train, X_test, y_test)
-
-    clfs = [clf_sgd, clf_grd]
     metrics = ["accuracy", "precision", "sensitivity", "specificity"]
-    for clf in clfs:
-        print "Calculating performance metrics: "
-        for m in metrics:
-            print m + ": " + str(performance(y_test,clf.predict(X_test),m))
+    n = 0
+    for train_index, test_index in kf.split(X):
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+
+        # svms too slow for this large dataset
+        # clf = svmlin(X_train, y_train, X_test, y_test)
+        # print np.unique(clf.predict(X_test))
+
+        #logreg will predict[0,1] // ~ 169s of training time // accuracy ~ 0.84
+        #hyperparameters: C = 1000
+        # clf_log = logreg(X_train, y_train, X_test, y_test)
+        # logResult.append(clf_log.score(X_test, y_test))
+
+        # print performance(y_test,clf_log.predict(X_test))
+        # print "----------------------------"
+
+        #sgd will predict[0,1] // ~ 1.28s of training time // accuracy ~ 0.83
+        #hyperparameters: alpha = 0.001, n_iters = 25
+        clf_sgd, X_testPre = sgd(X_train, y_train, X_test, y_test)
+        sgdResult.append(clf_sgd.score(X_testPre, y_test))
+
+        print performance(y_test,clf_sgd.predict(X_testPre))
+        print "----------------------------"
+
+        #dtree will predict [0,1] // ~ 44s of training time // accuracy ~ 0.96
+        #hyperparameters: depth = 20
+        # clf_dtree = dTree(X, y, X_train, y_train, X_test, y_test)
+        # dtreeResult.append(clf_dtree.score(X_test, y_test))
+
+        # print performance(y_test,clf_dtree.predict(X_test))
+        # print "----------------------------"
+
+        #gradient boosting will predict [0,1] // ~ 770s of training time // accuracy ~ 0.97
+        #hyperparameters: loss = deviance, learning_rate = 1, n_estimators = 100
+        # clf_grd = gradboost(X_train, y_train, X_test, y_test)
+        # grdResult.append(clf_grd.score(X_test, y_test))
+
+        # print performance(y_test,clf_grd.predict(X_test))
+        # print "----------------------------"
+
+        print "Finished fold " + str(n)
+        n = n + 1
+
+    print "========= Training Results (Accuracy Scores across n-Folds) ========="
+    # print "Log Reg: " + str(logResult) + " avg: " + str(sum(logResult) / float(len(logResult)))
+    print "SGD: " + str(sgdResult) + " avg: " + str(sum(sgdResult) / float(len(sgdResult)))
+    # print "DTree: " + str(dtreeResult) + " avg: " + str(sum(dtreeResult) / float(len(dtreeResult)))
+    # print "GRD: " + str(grdResult) + " avg: " + str(sum(grdResult) / float(len(grdResult)))
 
 if __name__ == "__main__":
     main()
