@@ -37,21 +37,25 @@ We did not want to solely rely on test accuracy as a performance metric. We also
 
 # Results
 Logistic Regression
+
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
 | ~232s | .85 | .83 | .88 | .81 |
 
 Stochastic Gradient Descent
+
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
 | ~1s | .83 | .81 | .84 | .80 |
 
 Decision Trees
+
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
 | ~44s | .96 | .94 | .98 | .94 |
 
 Gradient Boosting (Ensemble)
+
 | Training Time | Accuracy | Precision | Sensitivity | Specificity |
 |:-------------:|:--------:|:---------:|:-----------:|:-----------:|
 | ~2316s | .98 | .97 | .99 | .97 |
