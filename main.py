@@ -274,7 +274,7 @@ def main():
 
     print "Raw data initialized..."
 
-    kf = KFold(n_splits=5)
+    kf = KFold(n_splits=5)  # n = 5
 
     logResult = []
     sgdResult = []
@@ -293,11 +293,11 @@ def main():
 
         #logreg will predict[0,1] // ~ 169s of training time // accuracy ~ 0.84
         #hyperparameters: C = 1000
-        # clf_log = logreg(X_train, y_train, X_test, y_test)
-        # logResult.append(clf_log.score(X_test, y_test))
+        clf_log = logreg(X_train, y_train, X_test, y_test)
+        logResult.append(clf_log.score(X_test, y_test))
 
-        # print performance(y_test,clf_log.predict(X_test))
-        # print "----------------------------"
+        print performance(y_test,clf_log.predict(X_test))
+        print "----------------------------"
 
         #sgd will predict[0,1] // ~ 1.28s of training time // accuracy ~ 0.83
         #hyperparameters: alpha = 0.001, n_iters = 25
@@ -309,28 +309,28 @@ def main():
 
         #dtree will predict [0,1] // ~ 44s of training time // accuracy ~ 0.96
         #hyperparameters: depth = 20
-        # clf_dtree = dTree(X, y, X_train, y_train, X_test, y_test)
-        # dtreeResult.append(clf_dtree.score(X_test, y_test))
+        clf_dtree = dTree(X, y, X_train, y_train, X_test, y_test)
+        dtreeResult.append(clf_dtree.score(X_test, y_test))
 
-        # print performance(y_test,clf_dtree.predict(X_test))
-        # print "----------------------------"
+        print performance(y_test,clf_dtree.predict(X_test))
+        print "----------------------------"
 
         #gradient boosting will predict [0,1] // ~ 770s of training time // accuracy ~ 0.97
         #hyperparameters: loss = deviance, learning_rate = 1, n_estimators = 100
-        # clf_grd = gradboost(X_train, y_train, X_test, y_test)
-        # grdResult.append(clf_grd.score(X_test, y_test))
+        clf_grd = gradboost(X_train, y_train, X_test, y_test)
+        grdResult.append(clf_grd.score(X_test, y_test))
 
-        # print performance(y_test,clf_grd.predict(X_test))
-        # print "----------------------------"
+        print performance(y_test,clf_grd.predict(X_test))
+        print "----------------------------"
 
         print "Finished fold " + str(n)
         n = n + 1
 
     print "========= Training Results (Accuracy Scores across n-Folds) ========="
-    # print "Log Reg: " + str(logResult) + " avg: " + str(sum(logResult) / float(len(logResult)))
+    print "Log Reg: " + str(logResult) + " avg: " + str(sum(logResult) / float(len(logResult)))
     print "SGD: " + str(sgdResult) + " avg: " + str(sum(sgdResult) / float(len(sgdResult)))
-    # print "DTree: " + str(dtreeResult) + " avg: " + str(sum(dtreeResult) / float(len(dtreeResult)))
-    # print "GRD: " + str(grdResult) + " avg: " + str(sum(grdResult) / float(len(grdResult)))
+    print "DTree: " + str(dtreeResult) + " avg: " + str(sum(dtreeResult) / float(len(dtreeResult)))
+    print "GRD: " + str(grdResult) + " avg: " + str(sum(grdResult) / float(len(grdResult)))
 
 if __name__ == "__main__":
     main()

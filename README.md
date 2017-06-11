@@ -6,6 +6,6 @@ Each of the classifier training function takes in X,y train and test sets and re
 
 The performance measuring function takes in y_test (the actual test labels), the predicted y labels, and the performance metric that we want to evaluate. It will return the float value of the performance metric.
 
-The main function will call each of the classifier training functions and save the returned/trained classifiers in a list. When we have gathered all the trained classifiers, it'll iterate through all of them and calculate all the performance metrics for it.
+The main function will first split the raw data into n-folds (n=5 - can change to higher if desired), and train each of the classifiers for every single fold. For each fold, the classifier's metrics (accuracy, specificity, precision, sensitivity) and time taken will be printed onto the console.
 
 Simply place the training data file (named "train_data_final2.csv"), which can be obtained from Professor Fabien Scalzo, in the same directory as main.py. Then, you can run our code by running main.py
